@@ -1,65 +1,30 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Text, View} from 'react-native';
 import {BotonCalc} from '../components/BotonCalc';
 import {styles} from '../theme/appTheme';
+import {useCalculadora} from '../hooks/useCalculadora';
 
 export const CalculatorScreen = () => {
-  const [numero, setNumero] = useState('100');
-  const [numeroAnterior, setNumeroAnterior] = useState('0');
-
-  const limpiar = () => {
-    setNumero('0');
-  };
-
-  const armarNumero = (numeroTexto: string) => {
-    // No aceptar doble punto
-    if (numero.includes('.') && numeroTexto === '.') return;
-
-    if (numero.startsWith('0') || numero.startsWith('-0')) {
-      // Punto decimal
-      if (numeroTexto === '.') {
-        setNumero(numero + numeroTexto);
-
-        // Evaluar si es otro cero, y hay un punto
-      } else if (numeroTexto === '0' && numero.includes('.')) {
-        setNumero(numero + numeroTexto);
-
-        // Evaluar si es diferente de cero y no tiene un punto
-      } else if (numeroTexto !== '0' && !numero.includes('.')) {
-        setNumero(numeroTexto);
-
-        // Evitar 0000.0
-      } else if (numeroTexto === '0' && !numero.includes('.')) {
-        setNumero(numero);
-      } else {
-        setNumero(numero + numeroTexto);
-      }
-    } else {
-      setNumero(numero + numeroTexto);
-    }
-  };
-
-  const borrarUltimoNumero = () => {
-    if (numero.length === 1) {
-      setNumero('0');
-    } else if (numero.includes('-') && numero.length === 2) {
-      setNumero('0');
-    } else {
-      setNumero(numero.substring(0, numero.length - 1));
-    }
-  };
-
-  const positivoNegativo = () => {
-    if (numero.includes('-')) {
-      setNumero(numero.replace('-', ''));
-    } else {
-      setNumero('-' + numero);
-    }
-  };
+  const {
+    numero,
+    numeroAnterior,
+    calcular,
+    btnDividir,
+    btnMultiplicar,
+    btnRestar,
+    btnSumar,
+    limpiar,
+    positivoNegativo,
+    borrarUltimoNumero,
+    armarNumero,
+  } = useCalculadora();
 
   return (
     <View style={styles.calculadoraContainer}>
-      <Text style={styles.resultadoPequeno}>1,500.00</Text>
+      {numeroAnterior !== '0' && (
+        <Text style={styles.resultadoPequeno}>{numeroAnterior}</Text>
+      )}
+
       <Text
         numberOfLines={1}
         adjustsFontSizeToFit={true}
@@ -71,30 +36,30 @@ export const CalculatorScreen = () => {
         <BotonCalc valor="C" color="#9B9B9B" accion={limpiar} />
         <BotonCalc valor="+/-" color="#9B9B9B" accion={positivoNegativo} />
         <BotonCalc valor="del" color="#9B9B9B" accion={borrarUltimoNumero} />
-        <BotonCalc valor="/" color="#FF9427" accion={limpiar} />
+        <BotonCalc valor="/" color="#FF9427" accion={btnDividir} />
       </View>
       <View style={styles.fila}>
         <BotonCalc valor="7" accion={armarNumero} />
         <BotonCalc valor="8" accion={armarNumero} />
         <BotonCalc valor="9" accion={armarNumero} />
-        <BotonCalc valor="X" color="#FF9427" accion={limpiar} />
+        <BotonCalc valor="X" color="#FF9427" accion={btnMultiplicar} />
       </View>
       <View style={styles.fila}>
         <BotonCalc valor="4" accion={armarNumero} />
         <BotonCalc valor="5" accion={armarNumero} />
         <BotonCalc valor="6" accion={armarNumero} />
-        <BotonCalc valor="-" color="#FF9427" accion={limpiar} />
+        <BotonCalc valor="-" color="#FF9427" accion={btnRestar} />
       </View>
       <View style={styles.fila}>
         <BotonCalc valor="1" accion={armarNumero} />
         <BotonCalc valor="2" accion={armarNumero} />
         <BotonCalc valor="3" accion={armarNumero} />
-        <BotonCalc valor="+" color="#FF9427" accion={limpiar} />
+        <BotonCalc valor="+" color="#FF9427" accion={btnSumar} />
       </View>
       <View style={styles.fila}>
         <BotonCalc valor="0" ancho accion={armarNumero} />
         <BotonCalc valor="." accion={armarNumero} />
-        <BotonCalc valor="=" color="#FF9427" accion={limpiar} />
+        <BotonCalc valor="=" color="#FF9427" accion={calcular} />
       </View>
     </View>
   );

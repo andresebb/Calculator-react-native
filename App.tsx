@@ -6,7 +6,7 @@ import {styles} from './scr/theme/appTheme';
 const App = () => {
   return (
     <SafeAreaView style={styles.fondo}>
-      <StatusBar backgroundColor="red" />
+      <StatusBar backgroundColor="black" />
       <CalculatorScreen />
     </SafeAreaView>
   );
