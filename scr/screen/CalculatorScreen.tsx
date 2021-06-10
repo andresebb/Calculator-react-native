@@ -39,6 +39,16 @@ export const CalculatorScreen = () => {
     }
   };
 
+  const borrarUltimoNumero = () => {
+    if (numero.length === 1) {
+      setNumero('0');
+    } else if (numero.includes('-') && numero.length === 2) {
+      setNumero('0');
+    } else {
+      setNumero(numero.substring(0, numero.length - 1));
+    }
+  };
+
   const positivoNegativo = () => {
     if (numero.includes('-')) {
       setNumero(numero.replace('-', ''));
@@ -60,7 +70,7 @@ export const CalculatorScreen = () => {
       <View style={styles.fila}>
         <BotonCalc valor="C" color="#9B9B9B" accion={limpiar} />
         <BotonCalc valor="+/-" color="#9B9B9B" accion={positivoNegativo} />
-        <BotonCalc valor="del" color="#9B9B9B" accion={limpiar} />
+        <BotonCalc valor="del" color="#9B9B9B" accion={borrarUltimoNumero} />
         <BotonCalc valor="/" color="#FF9427" accion={limpiar} />
       </View>
       <View style={styles.fila}>
